@@ -177,7 +177,6 @@ public class Lab1{
             for(int j = 0; j<arraySize;j++){
                 Random random = new Random();
                 int randomInsert = random.nextInt(maxInteger-1) + 1;
-                //System.out.println(randomInsert);
                 temp[j] = randomInsert;
             }
             inputData[i] = temp;
