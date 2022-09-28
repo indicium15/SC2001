@@ -6,6 +6,7 @@ public class CreatingGraphs {
     public float p;
     public int MAX_VERTICES = 10;
     public int MAX_WEIGHT = 10;
+    public int edges = 0;
     Random random = new Random();
     public ArrayList<ArrayList<ListNode> > adjacencyList = new ArrayList<>();
     public int[][] adjacencyMatrix;
@@ -26,6 +27,7 @@ public class CreatingGraphs {
                     int weight = random.nextInt(MAX_WEIGHT-1) + 1;
                     adjacencyList.get(i).add(new ListNode(j,weight));
                     adjacencyMatrix[i][j] = weight;
+                    edges+=1;
                 }
             }
         }
