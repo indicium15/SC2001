@@ -1,16 +1,18 @@
 import java.util.ArrayList;
 import java.util.PriorityQueue;
 
-
 public class Lab2 {
     public static int comparisions = 0;
+    public static void resetComparisions(){
+        comparisions = 0;
+    }
     //Part A)
     public static int[] dijsktraAdjacencyMatrix(int graph[][], int source){
         int dist[] = new int[graph.length]; // The output array. Carrying the values of minimum distace
         Boolean visited[] = new Boolean[graph.length]; // Array to store visited and unvisted data.
         int last[] = new int[graph.length]; // The output array. Carrying the values of last vertex
         for (int i = 0; i < graph.length; i++) {
-            dist[i] = 9999999;
+            dist[i] = Integer.MAX_VALUE;
             visited[i] = false;
         }
         // Initialising the conditions before the loop
@@ -23,6 +25,7 @@ public class Lab2 {
                     && dist[minVertex] != Integer.MAX_VALUE
                     && dist[minVertex] + graph[minVertex][v] < dist[v])
                     dist[v] = dist[minVertex] + graph[minVertex][v];
+                    comparisions++;
             }
         }
         //System.out.print("Shortest distance array : ");//1 use this if u want to see the solution to the problem
@@ -64,6 +67,7 @@ public class Lab2 {
                 if(distance[currentNode.getVertex()] + connectedNodes.getWeight() < distance[connectedNodes.getVertex()]){
                     distance[connectedNodes.getVertex()] = connectedNodes.getWeight() + distance[currentNode.getVertex()];
                     queue.add(new ListNode(connectedNodes.getVertex(), distance[connectedNodes.getVertex()]));
+                    comparisions++;
                 }
             }
         }
@@ -78,19 +82,20 @@ public class Lab2 {
     public static void main(String[] args){
         CreatingGraphs graph = new CreatingGraphs(100,10);
         System.out.printf("Edges: %d\n",graph.edges);
-        
+        resetComparisions();
         long adjStartTime = System.nanoTime();
         int[] adjDistance = djikstraAdjacencyList(graph.vertices, 0, graph.adjacencyList);
         long adjEndTime = System.nanoTime();
         long adjDuration = adjEndTime - adjStartTime;
         System.out.printf("Time taken for Adjacency List Djiksta: %d nanoseconds \n",adjDuration);
-        
+        System.out.printf("Comparisions Made: %d \n",comparisions);
+        resetComparisions();
         long admStartTime = System.nanoTime();
         int[] admDistance = dijsktraAdjacencyMatrix(graph.adjacencyMatrix,0);
         long admEndTime = System.nanoTime();
         long admDuration = admEndTime - admStartTime;
         System.out.printf("Time taken for Adjacency Matrix Djiksta: %d nanoseconds \n",admDuration); 
-        
+        System.out.printf("Comparisions Made: %d \n",comparisions); 
         if(adjDuration > admDuration){
             System.out.println("Adjacency Matrix was Faster");
         }
