@@ -4,13 +4,15 @@ import java.util.ArrayList;
 public class CreatingGraphs {
     public int vertices;
     public float p;
-    final int MAX_VERTICES = 10;
-    final int MAX_WEIGHT = 10;
+    public int MAX_VERTICES = 10;
+    public int MAX_WEIGHT = 10;
     Random random = new Random();
     public ArrayList<ArrayList<ListNode> > adjacencyList = new ArrayList<>();
     public int[][] adjacencyMatrix;
 
-    public CreatingGraphs(){
+    public CreatingGraphs(int input_vertices, int input_weight){
+        MAX_VERTICES = input_vertices;
+        MAX_WEIGHT = input_weight;
         this.vertices = random.nextInt(MAX_VERTICES) + 1;
         this.p = random.nextFloat();
         for(int i = 0; i<this.vertices; i++){
@@ -49,11 +51,4 @@ public class CreatingGraphs {
             System.out.print("\n");
         }
     }
-
-    public static void main(String[] args){
-        CreatingGraphs graph = new CreatingGraphs();
-        graph.printAdjacencyMatrix();
-        System.out.print("\n\n");
-        graph.printAdjacencyList();
-    }   
 }

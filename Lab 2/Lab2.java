@@ -75,7 +75,7 @@ public class Lab2 {
         }
     }
     public static void main(String[] args){
-        CreatingGraphs graph = new CreatingGraphs();
+        CreatingGraphs graph = new CreatingGraphs(10,10);
         long adjStartTime = System.nanoTime();
         int[] adjDistance = djikstraAdjacencyList(graph.vertices, 0, graph.adjacencyList);
         long adjEndTime = System.nanoTime();
