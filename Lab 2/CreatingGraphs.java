@@ -12,13 +12,14 @@ public class CreatingGraphs {
     public int[][] adjacencyMatrix;
 
     public CreatingGraphs(int input_vertices, int input_weight){
-        MAX_VERTICES = input_vertices;
         MAX_WEIGHT = input_weight;
-        this.vertices = random.nextInt(MAX_VERTICES) + 1;
+        this.vertices = input_vertices;
         this.p = random.nextFloat();
+        //Initialize Adjacency List for All Vertex Nodes:
         for(int i = 0; i<this.vertices; i++){
             adjacencyList.add(new ArrayList<>());
         }
+        //Allocate Memory for Adjacency Matrix for Number of Vertices:
         adjacencyMatrix = new int[this.vertices][this.vertices];
         for(int i = 0; i<this.vertices; i++){
             for(int j = 0; j<this.vertices; j++){

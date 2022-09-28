@@ -4,6 +4,7 @@ import java.util.PriorityQueue;
 
 public class Lab2 {
     public static int comparisions = 0;
+    //Part A)
     public static int[] dijsktraAdjacencyMatrix(int graph[][], int source){
         int dist[] = new int[graph.length]; // The output array. Carrying the values of minimum distace
         Boolean visited[] = new Boolean[graph.length]; // Array to store visited and unvisted data.
@@ -35,11 +36,11 @@ public class Lab2 {
                 }   
             }  
         }
-        System.out.print("Shortest distance array : ");//1 use this if u want to see the solution to the problem
-        printArray(dist);
+        //System.out.print("Shortest distance array : ");//1 use this if u want to see the solution to the problem
+        //printArray(dist);
         return dist;
     } 
-
+    //Part B)
     public static int[] djikstraAdjacencyList(int vertex, int source, ArrayList<ArrayList<ListNode> > graph){
         //Initialize and define distance array with infinity value
         int[] distance = new int[vertex];
