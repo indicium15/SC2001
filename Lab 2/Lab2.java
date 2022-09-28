@@ -8,7 +8,6 @@ public class Lab2 {
     public static int[] dijsktraAdjacencyMatrix(int graph[][], int source){
         int dist[] = new int[graph.length]; // The output array. Carrying the values of minimum distace
         Boolean visited[] = new Boolean[graph.length]; // Array to store visited and unvisted data.
-        PriorityQueue<vertex> pq = new PriorityQueue<>(); // priority queue using the class edge
         int last[] = new int[graph.length]; // The output array. Carrying the values of last vertex
         for (int i = 0; i < graph.length; i++) {
             dist[i] = 9999999;
@@ -16,36 +15,37 @@ public class Lab2 {
         }
         // Initialising the conditions before the loop
         dist[source] = 0;
-        pq.add(new vertex(source, 0));
-        while(!pq.isEmpty()){
-            // Add new edges
-            // Compare to old distance
-            // Add the visited edges
-            vertex node = pq.remove();
-            visited[node.vertexNum] = true;
-            for (int x = 0 ; x < graph.length ; x++){
-                if (graph[node.vertexNum][x] != 0 && visited[x] == false){
-                    comparisions++;
-                    if ((node.edgeweight + graph[node.vertexNum][x] )< dist[x]){
-                        dist[x] = node.edgeweight + graph[node.vertexNum][x];
-                        pq.add(new vertex(x, dist[x]));
-                    }
-                }
-                else{
-                    comparisions++;
-                }   
-            }  
+        for(int count = 0; count < graph.length - 1; count++){
+            int minVertex = minDistance(dist,visited);
+            visited[minVertex] = true;
+            for(int v = 0; v< graph.length; v++){
+                if (!visited[v] && graph[minVertex][v] != 0
+                    && dist[minVertex] != Integer.MAX_VALUE
+                    && dist[minVertex] + graph[minVertex][v] < dist[v])
+                    dist[v] = dist[minVertex] + graph[minVertex][v];
+            }
         }
         //System.out.print("Shortest distance array : ");//1 use this if u want to see the solution to the problem
         //printArray(dist);
         return dist;
+    }
+    static int minDistance(int distance[], Boolean visited[]){
+        int minimum = Integer.MAX_VALUE;
+        int min_index = -1;
+        for(int i=0;i<distance.length;i++){
+            if(visited[i] == false && distance[i] <= minimum){
+                minimum = distance[i];
+                min_index = i; 
+            }
+        }
+        return min_index;
     } 
     //Part B)
     public static int[] djikstraAdjacencyList(int vertex, int source, ArrayList<ArrayList<ListNode> > graph){
         //Initialize and define distance array with infinity value
         int[] distance = new int[vertex];
-        for(int node:distance){
-            node = Integer.MAX_VALUE;
+        for(int i = 0; i<vertex; i++){
+            distance[i] = Integer.MAX_VALUE;
         }
         distance[source] = 0;
         //Java's in-built priority queue is based on the minimizing heap structure
@@ -76,26 +76,30 @@ public class Lab2 {
         }
     }
     public static void main(String[] args){
-        CreatingGraphs graph = new CreatingGraphs(10,10);
+        CreatingGraphs graph = new CreatingGraphs(100,10);
         System.out.printf("Edges: %d\n",graph.edges);
+        
         long adjStartTime = System.nanoTime();
         int[] adjDistance = djikstraAdjacencyList(graph.vertices, 0, graph.adjacencyList);
         long adjEndTime = System.nanoTime();
         long adjDuration = adjEndTime - adjStartTime;
         System.out.printf("Time taken for Adjacency List Djiksta: %d nanoseconds \n",adjDuration);
+        
         long admStartTime = System.nanoTime();
         int[] admDistance = dijsktraAdjacencyMatrix(graph.adjacencyMatrix,0);
         long admEndTime = System.nanoTime();
         long admDuration = admEndTime - admStartTime;
         System.out.printf("Time taken for Adjacency Matrix Djiksta: %d nanoseconds \n",admDuration); 
+        
         if(adjDuration > admDuration){
             System.out.println("Adjacency Matrix was Faster");
         }
         else{
             System.out.println("Adjacency List was Faster");
         }
-        //printArray(adjDistance);
-        //printArray(admDistance);
+        printArray(adjDistance);
+        System.out.print("\n\n\n");
+        printArray(admDistance);
 
     }
 }
