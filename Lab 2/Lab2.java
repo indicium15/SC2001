@@ -29,10 +29,10 @@ public class Lab2 {
             //System.out.println("Exploring Node " + nodeVertex + " with weight " + nodeWeight);
             visited[nodeVertex] = 1;
             for (int x = 0 ; x < graph.length ; x++){
-                if (graph[nodeVertex][x].getWeight() != 0 && visited[x] != 0){
+                if (graph[nodeVertex][x].getWeight() != 0 && visited[x] == 0){
                     comparisions++;
                     if ((nodeWeight + graph[nodeVertex][x].getWeight()) < dist[x]){
-                        dist[nodeVertex] = nodeWeight + graph[nodeVertex][x].getWeight();
+                        dist[x] = nodeWeight + graph[nodeVertex][x].getWeight();
                         pq.add(new ListNode(x, dist[node.getVertex()]));
                     }
                 }
