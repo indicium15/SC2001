@@ -1,5 +1,7 @@
 import java.util.ArrayList;
+import java.util.List;
 import java.util.PriorityQueue;
+
 
 public class Lab2 {
     public static int comparisions = 0;
@@ -7,25 +9,36 @@ public class Lab2 {
         comparisions = 0;
     }
     //Part A)
-    public static int[] dijsktraAdjacencyMatrix(int graph[][], int source){
+    public static int[] dijsktraAdjacencyMatrix(ListNode graph[][], int source){
         int dist[] = new int[graph.length]; // The output array. Carrying the values of minimum distace
-        Boolean visited[] = new Boolean[graph.length]; // Array to store visited and unvisted data.
+        int visited[] = new int[graph.length]; // Array to store visited and unvisted data.
+        PriorityQueue<ListNode>pq = new PriorityQueue<>();
         int last[] = new int[graph.length]; // The output array. Carrying the values of last vertex
         for (int i = 0; i < graph.length; i++) {
             dist[i] = Integer.MAX_VALUE;
-            visited[i] = false;
+            visited[i] = 0;
         }
         // Initialising the conditions before the loop
         dist[source] = 0;
-        for(int count = 0; count < graph.length - 1; count++){
-            int minVertex = minDistance(dist,visited);
-            visited[minVertex] = true;
-            for(int v = 0; v< graph.length; v++){
-                if (!visited[v] && graph[minVertex][v] != 0
-                    && dist[minVertex] != Integer.MAX_VALUE
-                    && dist[minVertex] + graph[minVertex][v] < dist[v])
-                    dist[v] = dist[minVertex] + graph[minVertex][v];
+        //dist[source] = graph[source][source].getWeight();
+        pq.add(new ListNode(source, 0));
+        while(!pq.isEmpty()){
+            ListNode node = pq.remove();
+            int nodeVertex = node.getVertex();
+            int nodeWeight = node.getWeight();
+            //System.out.println("Exploring Node " + nodeVertex + " with weight " + nodeWeight);
+            visited[nodeVertex] = 1;
+            for (int x = 0 ; x < graph.length ; x++){
+                if (graph[nodeVertex][x].getWeight() != 0 && visited[x] != 0){
                     comparisions++;
+                    if ((nodeWeight + graph[nodeVertex][x].getWeight()) < dist[x]){
+                        dist[nodeVertex] = nodeWeight + graph[nodeVertex][x].getWeight();
+                        pq.add(new ListNode(x, dist[node.getVertex()]));
+                    }
+                }
+                else{
+                    comparisions++;
+                }
             }
         }
         //System.out.print("Shortest distance array : ");//1 use this if u want to see the solution to the problem
@@ -47,10 +60,15 @@ public class Lab2 {
     public static int[] djikstraAdjacencyList(int vertex, int source, ArrayList<ArrayList<ListNode> > graph){
         //Initialize and define distance array with infinity value
         int[] distance = new int[vertex];
+        int[] visited = new int[vertex];
         for(int i = 0; i<vertex; i++){
             distance[i] = Integer.MAX_VALUE;
+            visited[i] = 0;
         }
+        //Initialize and define visited array with value 0
         distance[source] = 0;
+        //distance[source] = graph.get(source).get(source).getWeight();
+        visited[source] = 1;
         //Java's in-built priority queue is based on the minimizing heap structure
         //For this program we will directly implement that
         PriorityQueue<ListNode> queue = new PriorityQueue<>(
@@ -60,6 +78,7 @@ public class Lab2 {
         while(queue.size() > 0){
             //Pop node from the priority queue
             ListNode currentNode = queue.poll();
+            //visited[currentNode.getVertex()] = 1;
             //Explore connected nodes
             for(ListNode connectedNodes : graph.get(currentNode.getVertex())){
                 //If the distance of the current node and connected nodes is less than current distance
@@ -67,8 +86,8 @@ public class Lab2 {
                 if(distance[currentNode.getVertex()] + connectedNodes.getWeight() < distance[connectedNodes.getVertex()]){
                     distance[connectedNodes.getVertex()] = connectedNodes.getWeight() + distance[currentNode.getVertex()];
                     queue.add(new ListNode(connectedNodes.getVertex(), distance[connectedNodes.getVertex()]));
-                    comparisions++;
                 }
+                comparisions++;
             }
         }
         //Return distance array for shortest distance to all paths
@@ -76,12 +95,21 @@ public class Lab2 {
     }
     public static void printArray(int[]array){
         for(int a: array){
-            System.out.print(a + " ");     // Function to print a 1d array
+            if(a == Integer.MAX_VALUE){
+                System.out.print(" - ");
+            }
+            else{
+                System.out.print(a + " ");     // Function to print a 1d array
+            }
         }
     }
     public static void main(String[] args){
-        CreatingGraphs graph = new CreatingGraphs(100,10);
+        CreatingGraphs graph = new CreatingGraphs(4,10);
+        graph.printAdjacencyList();
+        System.out.println("");
+        graph.printAdjacencyMatrix();
         System.out.printf("Edges: %d\n",graph.edges);
+        System.out.println("");
         resetComparisions();
         long adjStartTime = System.nanoTime();
         int[] adjDistance = djikstraAdjacencyList(graph.vertices, 0, graph.adjacencyList);
@@ -97,14 +125,15 @@ public class Lab2 {
         System.out.printf("Time taken for Adjacency Matrix Djiksta: %d nanoseconds \n",admDuration); 
         System.out.printf("Comparisions Made: %d \n",comparisions); 
         if(adjDuration > admDuration){
-            System.out.println("Adjacency Matrix was Faster");
+            System.out.println("Adjacency Matrix was Faster\n");
         }
         else{
-            System.out.println("Adjacency List was Faster");
+            System.out.println("Adjacency List was Faster\n");
         }
+        System.out.println("Dijksta AdjList Output:");
         printArray(adjDistance);
-        System.out.print("\n\n\n");
+        System.out.print("\n\n");
+        System.out.println("Dijksta AdjMatrix Output:");
         printArray(admDistance);
-
     }
 }
