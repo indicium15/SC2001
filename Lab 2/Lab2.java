@@ -78,8 +78,11 @@ public class Lab2 {
         while(queue.size() > 0){
             //Pop node from the priority queue
             ListNode currentNode = queue.poll();
+            int currentIndex = currentNode.getVertex();
+            int currentWeight = currentNode.getWeight();
             //visited[currentNode.getVertex()] = 1;
             //Explore connected nodes
+            ArrayList<ListNode> toExplore = graph.get(currentNode.getVertex());
             for(ListNode connectedNodes : graph.get(currentNode.getVertex())){
                 //If the distance of the current node and connected nodes is less than current distance
                 //Update the value of the distance and add nodes to the priority queue
