@@ -12,7 +12,8 @@ public class Lab2 {
     public static int[] dijsktraAdjacencyMatrix(ListNode graph[][], int source){
         int dist[] = new int[graph.length]; // The output array. Carrying the values of minimum distace
         int visited[] = new int[graph.length]; // Array to store visited and unvisted data.
-        PriorityQueue<ListNode>pq = new PriorityQueue<>();
+        PriorityQueue<ListNode>pq = new PriorityQueue<>( 
+            (vertex1, vertex2) -> vertex1.getWeight() - vertex2.getWeight());
         int last[] = new int[graph.length]; // The output array. Carrying the values of last vertex
         for (int i = 0; i < graph.length; i++) {
             dist[i] = Integer.MAX_VALUE;
@@ -26,12 +27,16 @@ public class Lab2 {
             ListNode node = pq.remove();
             int nodeVertex = node.getVertex();
             int nodeWeight = node.getWeight();
+            System.out.println("Exploring the Current Node " + node.getVertex());
             //System.out.println("Exploring Node " + nodeVertex + " with weight " + nodeWeight);
             visited[nodeVertex] = 1;
             for (int x = 0 ; x < graph.length ; x++){
                 if (graph[nodeVertex][x].getWeight() != 0 && visited[x] == 0){
+                    printArray(dist);
+                    System.out.println("\t Exploring connected node " + graph[nodeVertex][x].getVertex() + " with distance " + graph[nodeVertex][x].getVertex()); 
                     comparisions++;
                     if ((nodeWeight + graph[nodeVertex][x].getWeight()) < dist[x]){
+                        System.out.println("\t\t Distance of " + dist[x] + " is greater than " + (nodeWeight + graph[nodeVertex][x].getWeight()));
                         dist[x] = nodeWeight + graph[nodeVertex][x].getWeight();
                         pq.add(new ListNode(x, dist[node.getVertex()]));
                     }
@@ -67,27 +72,31 @@ public class Lab2 {
         }
         //Initialize and define visited array with value 0
         distance[source] = 0;
+        //visited[source] = 1;
         //distance[source] = graph.get(source).get(source).getWeight();
-        visited[source] = 1;
         //Java's in-built priority queue is based on the minimizing heap structure
         //For this program we will directly implement that
         PriorityQueue<ListNode> queue = new PriorityQueue<>(
             (vertex1, vertex2) -> vertex1.getWeight() - vertex2.getWeight()
         );
         queue.add(new ListNode(source,0));
-        while(queue.size() > 0){
+        while(!queue.isEmpty()){
             //Pop node from the priority queue
-            ListNode currentNode = queue.poll();
-            int currentIndex = currentNode.getVertex();
-            int currentWeight = currentNode.getWeight();
+            ListNode currentNode = queue.remove();
+            System.out.println("Exploring the Current Node " + currentNode.getVertex());
+            //int currentIndex = currentNode.getVertex();
+            //int currentWeight = currentNode.getWeight();
             //visited[currentNode.getVertex()] = 1;
             //Explore connected nodes
             ArrayList<ListNode> toExplore = graph.get(currentNode.getVertex());
-            for(ListNode connectedNodes : graph.get(currentNode.getVertex())){
+            for(ListNode connectedNodes : toExplore){
                 //If the distance of the current node and connected nodes is less than current distance
                 //Update the value of the distance and add nodes to the priority queue
+                printArray(distance);
+                System.out.println("\t Exploring connected node " + connectedNodes.getVertex() + " with distance " + distance[connectedNodes.getVertex()]); 
                 if(distance[currentNode.getVertex()] + connectedNodes.getWeight() < distance[connectedNodes.getVertex()]){
-                    distance[connectedNodes.getVertex()] = connectedNodes.getWeight() + distance[currentNode.getVertex()];
+                    System.out.println("\t\t Distance of " + distance[connectedNodes.getVertex()] + " is greater than " + (distance[currentNode.getVertex()] + connectedNodes.getWeight()));
+                    distance[connectedNodes.getVertex()] = distance[currentNode.getVertex()] + connectedNodes.getWeight();
                     queue.add(new ListNode(connectedNodes.getVertex(), distance[connectedNodes.getVertex()]));
                 }
                 comparisions++;
